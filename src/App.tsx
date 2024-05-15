@@ -35,7 +35,7 @@ const Controls = styled.div`
   }
 `;
 const App: React.FC = () => {
-  const [sessionLength, setSessionLength] = useState(0.1);
+  const [sessionLength, setSessionLength] = useState(25);
   const [breakLength, setBreakLength] = useState(5);
   const [isSession, setIsSession] = useState(true);
   const [isRunning, setIsRunning] = useState(false);
