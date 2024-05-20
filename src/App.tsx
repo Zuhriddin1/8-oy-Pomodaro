@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import styled from "@emotion/styled";
 import { FaPlay, FaPause, FaRedo } from "react-icons/fa";
+import styled from "styled-components";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,13 +41,17 @@ const App: React.FC = () => {
   const [isRunning, setIsRunning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(sessionLength * 60);
   useEffect(() => {
+    setTimeLeft(sessionLength * 60);
+  }, [setSessionLength]);
+  useEffect(() => {
     if (timeLeft === 0) {
-      setIsSession((prevIsSession) => !prevIsSession);
-      setTimeLeft((prevTimeLeft) =>
-        isSession ? breakLength * 60 : sessionLength * 60
-      );
+      setIsSession((prevIsSession) => {
+        const nextIsSession = !prevIsSession;
+        setTimeLeft(nextIsSession ? sessionLength * 60 : breakLength * 60);
+        return nextIsSession;
+      });
     }
-  }, [timeLeft, sessionLength, breakLength, isSession]);
+  }, [timeLeft, sessionLength, setBreakLength]);
   useEffect(() => {
     if (!isRunning) return;
     const intervalId = setInterval(() => {
@@ -55,7 +59,6 @@ const App: React.FC = () => {
     }, 1000);
     return () => clearInterval(intervalId);
   }, [isRunning]);
-
   const handleStartStop = () => {
     setIsRunning((prevIsRunning) => !prevIsRunning);
   };
